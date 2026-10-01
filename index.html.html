@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ONeill Contractors Inc. - Shared Drive Architecture (SOP-ADM-001 v3.3)</title>
+    <style>
+        :root {
+            --navy: #0F2C59;
+            --navy-light: #1A3A75;
+            --orange: #D96B27;
+            --purple: #6B46C1;
+            --blue: #2B6CB0;
+            --gold: #D69E2E;
+            --charcoal: #2D3748;
+            --bg-light: #F7FAFC;
+            --border: #CBD5E0;
+            --white: #FFFFFF;
+            --green: #2F855A;
+            --red: #C53030;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--charcoal);
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* HEADER */
+        header {
+            background-color: var(--navy);
+            color: var(--white);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            z-index: 100;
+        }
+
+        .header-title h1 {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-title h1 span.badge {
+            background-color: var(--orange);
+            color: var(--white);
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .header-title p {
+            font-size: 12px;
+            color: #CBD5E0;
+            margin-top: 2px;
+        }
+
+        .header-meta {
+            text-align: right;
+            font-size: 12px;
+            color: #E2E8F0;
+        }
+
+        .header-meta strong {
+            color: var(--gold);
+        }
+
+        /* TOOLBAR */
+        .toolbar {
+            background-color: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 24px;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 480px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 8px 12px 8px 36px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 13px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #A0AEC0;
+            font-size: 14px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            background-color: var(--white);
+            border: 1px solid var(--border);
+            color: var(--charcoal);
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn:hover {
+            background-color: var(--bg-light);
+            border-color: #CBD5E0;
+        }
+
+        .btn-primary {
+            background-color: var(--navy);
+            color: var(--white);
+            border-color: var(--navy);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--navy-light);
+        }
+
+        /* MAIN CONTAINER */
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* TREE VIEW AREA */
+        .tree-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            gap: 16px;
+        }
+
+        .drive-column {
+            flex: 1;
+            background-color: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            min-width: 300px;
+        }
+
+        .drive-header {
+            padding: 12px 16px;
+            border-top-left-radius: 7px;
+            border-top-right-radius: 7px;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .drive-header.corp { background-color: var(--purple); }
+        .drive-header.team { background-color: var(--blue); }
+        .drive-header.sawtooth { background-color: var(--gold); color: #2D3748; }
+
+        .drive-body {
+            padding: 10px 12px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        /* TREE NODES */
+        .tree-node {
+            margin-bottom: 3px;
+            font-size: 12.5px;
+        }
+
+        .node-row {
+            display: flex;
+            align-items: center;
+            padding: 5px 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.15s;
+            gap: 6px;
+        }
+
+        .node-row:hover {
+            background-color: #EDF2F7;
+        }
+
+        .node-row.active {
+            background-color: #EBF8FF;
+            border-left: 3px solid var(--blue);
+            font-weight: 600;
+        }
+
+        .toggle-icon {
+            width: 14px;
+            height: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            color: #718096;
+            transition: transform 0.2s;
+        }
+
+        .toggle-icon.expanded {
+            transform: rotate(90deg);
+        }
+
+        .folder-icon {
+            font-size: 14px;
+        }
+
+        .node-name {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .node-tag {
+            font-size: 9.5px;
+            padding: 1px 5px;
+            border-radius: 4px;
+            background-color: #E2E8F0;
+            color: #4A5568;
+            font-weight: 600;
+        }
+
+        .node-tag.star { background-color: #FEFCBF; color: #B7791F; }
+        .node-tag.restr { background-color: #FED7D7; color: #9B2C2C; }
+
+        .tree-children {
+            margin-left: 16px;
+            padding-left: 6px;
+            border-left: 1px dashed #CBD5E0;
+            display: none;
+        }
+
+        .tree-children.open {
+            display: block;
+        }
+
+        /* DETAILS SIDE PANEL */
+        .details-panel {
+            width: 400px;
+            background-color: var(--white);
+            border-left: 1px solid var(--border);
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: -2px 0 8px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .panel-header {
+            border-bottom: 2px solid var(--navy);
+            padding-bottom: 10px;
+        }
+
+        .panel-header h2 {
+            font-size: 15px;
+            color: var(--navy);
+            margin-bottom: 2px;
+            word-break: break-word;
+        }
+
+        .panel-header p {
+            font-size: 11.5px;
+            color: #718096;
+        }
+
+        .detail-card {
+            background-color: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 12px;
+        }
+
+        .detail-card h3 {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #718096;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11.5px;
+            margin-bottom: 6px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #EDF2F7;
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #718096;
+            font-weight: 500;
+        }
+
+        .info-val {
+            font-weight: 600;
+            color: var(--charcoal);
+            text-align: right;
+        }
+
+        .path-preview {
+            font-family: Consolas, Monaco, "Courier New", monospace;
+            font-size: 10.5px;
+            background-color: #2D3748;
+            color: #68D391;
+            padding: 8px 10px;
+            border-radius: 5px;
+            word-break: break-all;
+            line-height: 1.4;
+        }
+
+        .progress-bar-bg {
+            height: 8px;
+            background-color: #E2E8F0;
+            border-radius: 4px;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background-color: var(--green);
+            width: 64%;
+            transition: width 0.3s, background-color 0.3s;
+        }
+
+        /* HIGHLIGHT FOR SEARCH */
+        .highlight {
+            background-color: #FEFCBF !important;
+            font-weight: bold;
+            color: #744210 !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="header-title">
+            <h1>ONeill Contractors Inc. <span class="badge">SOP-ADM-001 v3.3</span></h1>
+            <p>Interactive Enterprise Google Workspace Database Architecture Explorer</p>
+        </div>
+        <div class="header-meta">
+            Proposal Date: <strong>October 1, 2026</strong><br>
+            Personnel Scope: <strong>~50 Full-Time Staff</strong>
+        </div>
+    </header>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="Search folders, clients, file names, or doc types (e.g. 'USACE', 'ARMY', 'QUO', 'Div-26')...">
+        </div>
+        <div class="btn-group">
+            <button class="btn" onclick="expandAll()">📂 Expand All</button>
+            <button class="btn" onclick="collapseAll()">📁 Collapse All</button>
+            <button class="btn btn-primary" onclick="resetView()">🔄 Reset View</button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="main-container">
+
+        <!-- TREE VIEW CONTAINER -->
+        <div class="tree-container">
+
+            <!-- DRIVE 1: CORPORATE -->
+            <div class="drive-column">
+                <div class="drive-header corp">
+                    <span>🏢 ONEILL-CORPORATE</span>
+                    <span style="font-size: 11px; opacity: 0.9;">C-Suite Restricted</span>
+                </div>
+                <div class="drive-body" id="corpTree"></div>
+            </div>
+
+            <!-- DRIVE 2: TEAM -->
+            <div class="drive-column">
+                <div class="drive-header team">
+                    <span>👥 ONEILL-TEAM</span>
+                    <span style="font-size: 11px; opacity: 0.9;">All-Staff Operational Hub</span>
+                </div>
+                <div class="drive-body" id="teamTree"></div>
+            </div>
+
+            <!-- DRIVE 3: SAWTOOTH JV -->
+            <div class="drive-column">
+                <div class="drive-header sawtooth">
+                    <span>🤝 SAWTOOTH</span>
+                    <span style="font-size: 11px; opacity: 0.9;">ONeill + Richard Group JV</span>
+                </div>
+                <div class="drive-body" id="sawtoothTree"></div>
+            </div>
+
+        </div>
+
+        <!-- DETAILS SIDE PANEL -->
+        <div class="details-panel" id="detailsPanel">
+            <div class="panel-header">
+                <h2 id="panelTitle">Select a Folder or File</h2>
+                <p id="panelSub">Click any item in the tree to inspect security scope, SOP rules, and path budget math.</p>
+            </div>
+
+            <div class="detail-card">
+                <h3>Governance & Security Scope</h3>
+                <div class="info-row">
+                    <span class="info-label">Access Role:</span>
+                    <span class="info-val" id="infoAccess">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Shared Drive:</span>
+                    <span class="info-val" id="infoDrive">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">SOP Category:</span>
+                    <span class="info-val" id="infoCategory">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Restricted Access:</span>
+                    <span class="info-val" id="infoRestricted">-</span>
+                </div>
+            </div>
+
+            <div class="detail-card">
+                <h3>Local Path Length Budget Check</h3>
+                <div class="path-preview" id="infoPath">O:\Team\...</div>
+                <div style="margin-top: 10px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 11px;">
+                        <span>Path Length: <strong id="infoLength">0</strong> chars</span>
+                        <span>Target Limit: <strong>210 chars</strong></span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="infoProgress"></div>
+                    </div>
+                    <div style="font-size: 11px; color: var(--green); margin-top: 6px; font-weight: 600;" id="infoBuffer">
+                        ✓ Safety Buffer Active
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-card">
+                <h3>Lifecycle & SOP-ADM-001 v3.3 Directive</h3>
+                <p style="font-size: 11.5px; color: var(--charcoal); line-height: 1.4;" id="infoDescription">
+                    SOP-ADM-001 v3.3 treats Google Drive as a structured relational database. It uses universal agency acronyms (USACE, ARMY, NAVFAC) and AI-Self-Describing standalone file names with zero intermediate phase folders.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT ARCHITECTURE ENGINE -->
+    <script>
+        function get15Subfolders(prjCode) {
+            return [
+                {
+                    name: "01-Contracts",
+                    desc: "Prime contract, Notice of Award, bonds, COIs, tax certs, reps & certs.",
+                    children: [
+                        { name: prjCode + "_ADM_GEN_PerformanceBond_2026-10-01_v1.pdf", isFile: true, docType: "ADM" }
+                    ]
+                },
+                {
+                    name: "02-Plans-Specs",
+                    desc: "Client bid solicitations, drawings, specs, addenda 0001-0008, UFGS specs.",
+                    children: [
+                        { name: prjCode + "_DWG_Sec-033000_ArchitecturalPlans_2026-10-01_v1.pdf", isFile: true, docType: "DWG" }
+                    ]
+                },
+                {
+                    name: "03-Submittals",
+                    desc: "Pre-con submittal register, material approval packages, shop drawings, SDS.",
+                    children: [
+                        { name: prjCode + "_SUB_Div-07_TPO-RoofMembrane_2026-10-01_v1.pdf", isFile: true, docType: "SUB" }
+                    ]
+                },
+                {
+                    name: "04-RFIs",
+                    desc: "Pre-proposal inquiries (PPIs), formal Requests for Information, owner answer logs.",
+                    children: [
+                        { name: prjCode + "_RFI_Div-03_001-FoundationDepth_2026-10-01_v1.pdf", isFile: true, docType: "RFI" }
+                    ]
+                },
+                {
+                    name: "05-COs",
+                    desc: "Change Order Requests (CORs), contract modifications, scope credits, pricing backup.",
+                    children: [
+                        { name: prjCode + "_CO_Div-26_002-WallCredit_2026-10-01_v1.pdf", isFile: true, docType: "CO" }
+                    ]
+                },
+                { name: "06-Meetings", desc: "Pre-bid site visit notes, pre-con minutes, weekly progress meeting notes." },
+                {
+                    name: "07-Schedule",
+                    desc: "Preliminary bid schedule, baseline CPM schedule (.mpp & PDF), look-aheads.",
+                    children: [
+                        { name: prjCode + "_SCH_GEN_BaselineCPM_2026-10-01_v1.mpp", isFile: true, docType: "SCH" }
+                    ]
+                },
+                {
+                    name: "08-Budget",
+                    desc: "Internal bid sheet, takeoffs, living Schedule of Values (SOV), cost forecasts.",
+                    children: [
+                        { name: prjCode + "_EST_GEN_InternalBidSheet_2026-10-01_v1.xlsx", isFile: true, docType: "EST" }
+                    ]
+                },
+                {
+                    name: "09-Pay-Apps",
+                    desc: "Monthly prime contractor payment applications, SOV sign-offs, lien waivers.",
+                    children: [
+                        { name: prjCode + "_PAY_GEN_App01-Final_2026-10-01_v1.pdf", isFile: true, docType: "PAY" }
+                    ]
+                },
+                { name: "10-Corr", desc: "Client correspondence, formal notices, contractual owner letters, email logs." },
+                {
+                    name: "11-Safety",
+                    desc: "Site-specific APP, Activity Hazard Analyses (AHAs), EPP, SSHO daily logs.",
+                    children: [
+                        { name: prjCode + "_SAF_Div-07_FallProtectionAHA_2026-10-01_v1.pdf", isFile: true, docType: "SAF" }
+                    ]
+                },
+                {
+                    name: "12-Dailies",
+                    desc: "Daily production reports, daily QC reports, site sign-in sheets, weather logs.",
+                    children: [
+                        { name: prjCode + "_RPT_GEN_DailyQCReport_2026-10-01_v1.pdf", isFile: true, docType: "RPT" }
+                    ]
+                },
+                {
+                    name: "13-Subs",
+                    desc: "Subcontractor trade proposals organized by CSI MasterFormat Division (Div-01 to Div-48).",
+                    children: [
+                        {
+                            name: "Div-03-Concrete",
+                            desc: "CSI Division 03 Concrete trade quotes.",
+                            children: [
+                                { name: prjCode + "_QUO_Div-03_ReadyMixConcreteQuote_2026-10-01_v1.pdf", isFile: true, docType: "QUO" }
+                            ]
+                        },
+                        {
+                            name: "Div-26-Electrical",
+                            desc: "CSI Division 26 Electrical trade quotes.",
+                            children: [
+                                { name: prjCode + "_QUO_Div-26_EatonElectricProposal_2026-10-01_v1.pdf", isFile: true, docType: "QUO" }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: "14-Photos",
+                    desc: "Pre-con site photos, progress photos, aerial drone footage, site walk videos.",
+                    children: [
+                        { name: prjCode + "_PHO_GEN_PreConSiteWalk_2026-10-01_v1.jpg", isFile: true, docType: "PHO" }
+                    ]
+                },
+                {
+                    name: "15-Closeout",
+                    desc: "O&M manuals, manufacturer warranties, as-built CAD drawings, CPARS ratings.",
+                    children: [
+                        { name: prjCode + "_CLO_Div-07_RoofWarranty_2026-10-01_v1.pdf", isFile: true, docType: "CLO" }
+                    ]
+                }
+            ];
+        }
+
+        const treeData = {
+            corp: [
+                {
+                    name: "01-Legal",
+                    desc: "Restricted corporate legal records, board resolutions, litigation files, JV agreements.",
+                    access: "C-Suite / Drive Admin",
+                    restr: true,
+                    children: [
+                        { name: "Corp-Governance", desc: "Board resolutions, operating agreements, stock registers." },
+                        { name: "Contracts-Agmts", desc: "Master corporate contracts, strategic JV agreements." },
+                        { name: "Litigation-Claims", desc: "Legal dispute documentation and counsel letters." },
+                        { name: "Compliance", desc: "Regulatory compliance filings and corporate licensing audits." }
+                    ]
+                },
+                {
+                    name: "02-Planning",
+                    desc: "C-Suite strategic planning, expansion research, advisory board packages.",
+                    access: "C-Suite / Drive Admin",
+                    restr: true,
+                    children: [
+                        { name: "Strategic-Plans", desc: "Multi-year corporate growth roadmaps and revenue targets." },
+                        { name: "Market-Analysis", desc: "Regional market expansion research and feasibility studies." },
+                        { name: "Growth-Initiatives", desc: "New service line development and capital acquisition." },
+                        { name: "Board-Advisory", desc: "Board meeting decks and advisory committee briefs." }
+                    ]
+                },
+                {
+                    name: "03-Financial",
+                    desc: "Executive financial statements, banking lines, bonding capacity, tax strategy.",
+                    access: "C-Suite / Drive Admin",
+                    restr: true,
+                    children: [
+                        { name: "Exec-Reports", desc: "Monthly/quarterly P&L, balance sheets, cash flow models." },
+                        { name: "Banking-Credit", desc: "Lines of credit, treasury management, banking covenants." },
+                        { name: "Bonding-Surety", desc: "Bonding capacity reports and underwriter submission packages." },
+                        { name: "Tax-Strategy", desc: "Corporate tax planning, CPA filings, R&D credits." },
+                        { name: "MA-Investments", desc: "Merger & acquisition evaluations, asset purchase records." }
+                    ]
+                },
+                {
+                    name: "04-HR",
+                    desc: "Confidential personnel files, executive compensation, performance appraisals.",
+                    access: "C-Suite / Drive Admin",
+                    restr: true,
+                    children: [
+                        { name: "Employee-Records", desc: "Confidential personnel folders, I-9 verifications, background checks." },
+                        { name: "Comp-Benefits", desc: "Executive compensation plans, health insurance, 401(k) records." },
+                        { name: "Perf-Mgmt", desc: "Annual performance appraisals and bonus structures." },
+                        { name: "Succession-Plan", desc: "C-suite leadership continuity plans." },
+                        { name: "Recruiting", desc: "Executive search records and talent acquisition pipelines." }
+                    ]
+                },
+                {
+                    name: "05-Info-Technology",
+                    desc: "IT governance, enterprise software licenses, backup & disaster protocols.",
+                    access: "C-Suite / Drive Admin",
+                    restr: true,
+                    children: [
+                        { name: "IT-Strategy", desc: "Enterprise technology architecture plans and cloud roadmaps." },
+                        { name: "Software-Lic", desc: "Google Workspace, Procore, Estimating software licensing." },
+                        { name: "Infrastructure", desc: "Network topography, hardware assets, security configurations." },
+                        { name: "Disaster-Recovery", desc: "Data backup protocols, cyber insurance, incident response." }
+                    ]
+                },
+                {
+                    name: "06-Operations",
+                    desc: "Executive project KPIs, fleet management, resource allocation models.",
+                    access: "C-Suite / Drive Admin",
+                    restr: true,
+                    children: [
+                        { name: "Exec-Project-Oversight", desc: "High-level Work-in-Progress (WIP) tracking reports." },
+                        { name: "Resource-Allocation", desc: "Superintendent/PM staffing allocation models." },
+                        { name: "Fleet-Equipment", desc: "Vehicle titles, heavy machinery acquisition & depreciation." },
+                        { name: "Perf-Dashboards", desc: "Executive gross margin KPI dashboards." }
+                    ]
+                }
+            ],
+            team: [
+                {
+                    name: "01-Administrative",
+                    desc: "General company admin, master templates, vendor lists, corporate insurance.",
+                    access: "All Staff (Contributor)",
+                    children: [
+                        { name: "Company-Policies", desc: "Employee handbooks, general SOPs, safety policy manuals." },
+                        { name: "Insurance-Bond", desc: "Certificates of Insurance (COIs), standard project bond forms." },
+                        { name: "Licenses-Permits", desc: "State contractor licenses, municipal business permits." },
+                        { name: "Vendor-Supplier", desc: "Approved vendor lists, master supplier credit agreements." },
+                        { name: "Templates-Forms", desc: "Official company document templates, letterheads, billing forms." },
+                        { name: "Office-Mgmt", desc: "Office facilities leases, utility accounts, supply orders." }
+                    ]
+                },
+                {
+                    name: "02-Accounting",
+                    desc: "Daily accounting hub for subcontractor invoices, billings, and job costs.",
+                    access: "All Staff / Restricted Payroll",
+                    children: [
+                        { name: "Accts-Payable", desc: "Subcontractor/vendor invoices, payment receipts, lien waivers." },
+                        { name: "Accts-Receivable", desc: "Client billing logs, incoming payment confirmations." },
+                        { name: "Payroll [Restricted]", desc: "Weekly timesheets, certified payroll reports (Restricted Access).", restr: true },
+                        { name: "Budgets-Fcst", desc: "Operating budget models, overhead forecasting spreadsheets." },
+                        { name: "Tax-Compl [R]", desc: "Sales tax exemption certificates, quarterly payroll tax filings.", restr: true },
+                        { name: "Financial-Reports", desc: "Job cost accounting reports, WIP schedules." }
+                    ]
+                },
+                {
+                    name: "03-Project-Pursuit",
+                    desc: "Business development tracking for incoming RFPs and pre-qualification packages.",
+                    access: "All Staff (Contributor)",
+                    children: [
+                        { name: "Active-Leads", desc: "Incoming bid opportunities, business development pipeline tracking." },
+                        { name: "Pre-Qualification", desc: "Owner pre-qualification packages, SF330 submissions." },
+                        { name: "Go-No-Go", desc: "Project evaluation scorecards, risk assessment forms." },
+                        { name: "Pursuit-Templates", desc: "Standard proposal templates, capability statement graphics." }
+                    ]
+                },
+                {
+                    name: "04-Estimating",
+                    desc: "Global bidding hub. Holds active takeoffs, submitted client pricing proposals, sub quotes.",
+                    access: "All Staff (Contributor)",
+                    children: [
+                        { name: "Active-Bids", desc: "Work-in-progress estimates currently out for pricing." },
+                        { name: "Submitted-Proposals", desc: "Final pricing proposals submitted to clients awaiting award." },
+                        { name: "Won-Awarded", desc: "Successful bids transitioning to 05-Projects." },
+                        { name: "Lost-No-Bid", desc: "Archived estimates for unsuccessful proposals." },
+                        { name: "Bid-Templates", desc: "Standard estimating spreadsheets, unit rate databases." },
+                        { name: "Sub-Quotes", desc: "Subcontractor trade quote repositories organized by CSI Divisions 01 to 48." }
+                    ]
+                },
+                {
+                    name: "05-Projects ★",
+                    desc: "MASTER ACTIVE PROJECT HUB! Houses individual project containers organized under official Client Agency folders.",
+                    access: "All Staff (Contributor)",
+                    star: true,
+                    children: [
+                        {
+                            name: "USACE",
+                            desc: "U.S. Army Corps of Engineers Client Portfolio Folder.",
+                            children: [
+                                {
+                                    name: "26-USACE-015_Courthouse-Renovation",
+                                    desc: "SINGLE LIFECYCLE PROJECT CONTAINER. Contains all 15 subfolders from bidding to completion.",
+                                    isProject: true,
+                                    children: get15Subfolders("26-USACE-015")
+                                },
+                                { name: "_Completed-Projects", desc: "Archival folder for fully closed-out USACE jobs." },
+                                { name: "_Completed-Unawarded", desc: "Archival folder for unawarded USACE bid proposals." }
+                            ]
+                        },
+                        {
+                            name: "ARMY",
+                            desc: "U.S. Army Client Portfolio Folder.",
+                            children: [
+                                {
+                                    name: "26-ARMY-022_FtMcCoy-Fix-Drainage",
+                                    desc: "SINGLE LIFECYCLE PROJECT CONTAINER. Fort McCoy drainage repair project.",
+                                    isProject: true,
+                                    children: get15Subfolders("26-ARMY-022")
+                                },
+                                { name: "_Completed-Projects", desc: "Archival folder for closed Army jobs." }
+                            ]
+                        },
+                        {
+                            name: "NAVFAC",
+                            desc: "Naval Facilities Engineering Systems Command Portfolio Folder.",
+                            children: [
+                                {
+                                    name: "26-NAVFAC-004_NavalBase-Upgrade",
+                                    desc: "SINGLE LIFECYCLE PROJECT CONTAINER. Naval Base infrastructure upgrade.",
+                                    isProject: true,
+                                    children: get15Subfolders("26-NAVFAC-004")
+                                }
+                            ]
+                        },
+                        {
+                            name: "ANG",
+                            desc: "Air National Guard Client Portfolio Folder.",
+                            children: [
+                                {
+                                    name: "26-ANG-031_Vault-Doors",
+                                    desc: "SINGLE LIFECYCLE PROJECT CONTAINER. Vault Door installation project.",
+                                    isProject: true,
+                                    children: get15Subfolders("26-ANG-031")
+                                }
+                            ]
+                        },
+                        {
+                            name: "FAA",
+                            desc: "Federal Aviation Administration Client Portfolio Folder.",
+                            children: [
+                                {
+                                    name: "26-FAA-072_StLouis-Airport-Roofing",
+                                    desc: "SINGLE LIFECYCLE PROJECT CONTAINER. St. Louis Airport ADX roofing project.",
+                                    isProject: true,
+                                    children: get15Subfolders("26-FAA-072")
+                                }
+                            ]
+                        },
+                        { name: "DOL", desc: "Department of Labor Client Portfolio Folder." },
+                        { name: "FBI", desc: "Federal Bureau of Investigation Client Portfolio Folder." },
+                        { name: "GLN", desc: "City of Glenview Municipal Projects Portfolio Folder." },
+                        { name: "GSA", desc: "General Services Administration Client Portfolio Folder." },
+                        { name: "VA", desc: "Veterans Affairs Client Portfolio Folder." }
+                    ]
+                },
+                {
+                    name: "06-CPE",
+                    desc: "Continuous Professional Education platform containing employee training and SOPs.",
+                    access: "All Staff (Contributor)",
+                    children: [
+                        { name: "Training-Prog", desc: "Internal training modules and onboarding materials." },
+                        { name: "OSHA-Safety", desc: "OSHA 10/30 training records, toolbox talk libraries." },
+                        { name: "Cont-Education", desc: "Professional licensing credits and seminar notes." },
+                        { name: "Mentorship", desc: "PM and superintendent development frameworks." },
+                        { name: "Knowledge-Base", desc: "Lessons learned database and technical construction SOPs." }
+                    ]
+                },
+                {
+                    name: "07-Marketing",
+                    desc: "Marketing assets hub containing logos, project photos, staff resumes, and proposals.",
+                    access: "All Staff (Contributor)",
+                    children: [
+                        { name: "Brand-Assets", desc: "High-res company logos, brand guidelines, color palettes." },
+                        { name: "Project-Portfolio", desc: "Finished project write-ups and case studies." },
+                        { name: "Proposals-Quals", desc: "Marketing graphics, staff resume packages, capability statements." },
+                        { name: "Website-Social", desc: "Website content, press releases, social media media assets." },
+                        { name: "Media-Assets", desc: "Jobsite photography and drone video walkthrough footage." }
+                    ]
+                }
+            ],
+            sawtooth: [
+                {
+                    name: "01-Administrative-JV",
+                    desc: "JV agreement documents, JV insurance policies, joint bonding capacity certs.",
+                    access: "Sawtooth JV Members",
+                    children: [
+                        { name: "Policies-JV", desc: "Joint venture policies and co-branded SOPs." },
+                        { name: "Insurance-Bond-JV", desc: "JV specific insurance policies and joint bonds." }
+                    ]
+                },
+                {
+                    name: "02-Accounting-JV",
+                    desc: "Dedicated accounting records for JV bank accounts, partner capital calls, billings.",
+                    access: "Sawtooth JV Accounting",
+                    children: [
+                        { name: "AP-JV", desc: "JV subcontractor invoices and vendor receipts." },
+                        { name: "AR-JV", desc: "Client pay applications and partner capital calls." }
+                    ]
+                },
+                {
+                    name: "03-Project-Pursuit-JV",
+                    desc: "Joint pursuit tracking for major federal MATOC/SATOC opportunities.",
+                    access: "Sawtooth JV Pursuit",
+                    children: [
+                        { name: "Active-Leads-JV", desc: "Shared JV lead pipeline." },
+                        { name: "Pre-Qual-JV", desc: "Joint SF330 submission packages." }
+                    ]
+                },
+                {
+                    name: "04-Estimating-JV",
+                    desc: "Joint estimating workspace for shared takeoffs and partner pricing reviews.",
+                    access: "Sawtooth JV Estimating",
+                    children: [
+                        { name: "Active-Bids-JV", desc: "Work-in-progress JV takeoffs." },
+                        { name: "Sub-Quotes-JV", desc: "Combined subcontractor trade quote repository." }
+                    ]
+                },
+                {
+                    name: "05-Projects-JV ★",
+                    desc: "Active JV project hub. Houses individual Sawtooth project folders using YY-SAW-### prefix.",
+                    access: "Sawtooth JV Team",
+                    star: true,
+                    children: [
+                        {
+                            name: "SAW",
+                            desc: "Joint Venture Client Folder.",
+                            children: [
+                                {
+                                    name: "26-SAW-001_FortMcCoy-Barracks",
+                                    desc: "JOINT VENTURE SINGLE PROJECT CONTAINER.",
+                                    isProject: true,
+                                    children: get15Subfolders("26-SAW-001")
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: "06-CPE-JV",
+                    desc: "Joint venture site safety protocols and partner EM 385-1-1 compliance manuals.",
+                    access: "Sawtooth JV Members",
+                    children: [
+                        { name: "Safety-JV", desc: "Joint safety plans and EM 385-1-1 manuals." }
+                    ]
+                },
+                {
+                    name: "07-Marketing-JV",
+                    desc: "Co-branded marketing collateral, JV project photography, press releases.",
+                    access: "Sawtooth JV Members",
+                    children: [
+                        { name: "Brand-Assets-JV", desc: "Co-branded logos and presentation graphics." }
+                    ]
+                }
+            ]
+        };
+
+        // RENDER TREES
+        function renderTree(data, containerId, driveName, driveBasePath) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = "";
+
+            data.forEach(item => {
+                container.appendChild(createNodeElement(item, driveName, driveBasePath));
+            });
+        }
+
+        function createNodeElement(item, driveName, currentPath) {
+            const nodeDiv = document.createElement("div");
+            nodeDiv.className = "tree-node";
+
+            const thisPath = currentPath + "\\" + item.name;
+
+            const rowDiv = document.createElement("div");
+            rowDiv.className = "node-row";
+
+            const hasChildren = item.children && item.children.length > 0;
+
+            // Toggle Icon
+            const toggleSpan = document.createElement("span");
+            toggleSpan.className = "toggle-icon";
+            toggleSpan.innerText = hasChildren ? "▶" : "";
+            rowDiv.appendChild(toggleSpan);
+
+            // Folder/File Icon
+            const iconSpan = document.createElement("span");
+            iconSpan.className = "folder-icon";
+            if (item.isFile) {
+                iconSpan.innerText = "📄";
+            } else if (item.isProject) {
+                iconSpan.innerText = "🏗️";
+            } else if (item.star) {
+                iconSpan.innerText = "⭐";
+            } else {
+                iconSpan.innerText = "📁";
+            }
+            rowDiv.appendChild(iconSpan);
+
+            // Name
+            const nameSpan = document.createElement("span");
+            nameSpan.className = "node-name";
+            nameSpan.innerText = item.name;
+            rowDiv.appendChild(nameSpan);
+
+            // Tag
+            if (item.star) {
+                const tagSpan = document.createElement("span");
+                tagSpan.className = "node-tag star";
+                tagSpan.innerText = "PROJECTS HUB";
+                rowDiv.appendChild(tagSpan);
+            } else if (item.restr) {
+                const tagSpan = document.createElement("span");
+                tagSpan.className = "node-tag restr";
+                tagSpan.innerText = "RESTRICTED";
+                rowDiv.appendChild(tagSpan);
+            }
+
+            nodeDiv.appendChild(rowDiv);
+
+            // Children Div
+            let childrenDiv = null;
+            if (hasChildren) {
+                childrenDiv = document.createElement("div");
+                childrenDiv.className = "tree-children";
+                item.children.forEach(child => {
+                    childrenDiv.appendChild(createNodeElement(child, driveName, thisPath));
+                });
+                nodeDiv.appendChild(childrenDiv);
+            }
+
+            // Click Handler
+            rowDiv.addEventListener("click", (e) => {
+                e.stopPropagation();
+
+                // Clear previous active
+                document.querySelectorAll(".node-row.active").forEach(r => r.classList.remove("active"));
+                rowDiv.classList.add("active");
+
+                // Toggle children
+                if (hasChildren && childrenDiv) {
+                    const isOpen = childrenDiv.classList.contains("open");
+                    if (isOpen) {
+                        childrenDiv.classList.remove("open");
+                        toggleSpan.classList.remove("expanded");
+                    } else {
+                        childrenDiv.classList.add("open");
+                        toggleSpan.classList.add("expanded");
+                    }
+                }
+
+                // Update Side Details Panel
+                updateDetails(item, driveName, thisPath);
+            });
+
+            return nodeDiv;
+        }
+
+        // UPDATE SIDE PANEL
+        function updateDetails(item, driveName, fullPath) {
+            document.getElementById("panelTitle").innerText = item.name;
+            document.getElementById("panelSub").innerText = item.isFile ? "Individual Document Specification" : "Folder Container Specification";
+
+            document.getElementById("infoDrive").innerText = driveName;
+            document.getElementById("infoAccess").innerText = item.access || (driveName.includes("CORPORATE") ? "C-Suite / Admin" : "All Staff (Contributor)");
+            document.getElementById("infoCategory").innerText = item.isFile ? "Document (" + (item.docType || "PDF") + ")" : (item.isProject ? "Project Container" : "Directory Folder");
+            document.getElementById("infoRestricted").innerText = item.restr ? "YES (C-Suite Only)" : "NO (Standard)";
+
+            document.getElementById("infoPath").innerText = fullPath;
+            const pathLen = fullPath.length;
+            document.getElementById("infoLength").innerText = pathLen;
+
+            const progressFill = document.getElementById("infoProgress");
+            const pct = Math.min(100, Math.round((pathLen / 210) * 100));
+            progressFill.style.width = pct + "%";
+
+            if (pathLen > 210) {
+                progressFill.style.backgroundColor = "var(--red)";
+                document.getElementById("infoBuffer").innerHTML = "<span style='color: var(--red);'>⚠️ WARNING: Exceeds Target 210 Char Limit</span>";
+            } else {
+                progressFill.style.backgroundColor = "var(--green)";
+                const buf = 210 - pathLen;
+                document.getElementById("infoBuffer").innerText = "✓ Safety Buffer: " + buf + " Characters Margin Below Limit";
+            }
+
+            document.getElementById("infoDescription").innerText = item.desc || "SOP-ADM-001 v3.3 standard directory node. Governed by ONeill Contractors Inc. enterprise document control policy.";
+        }
+
+        // CONTROL BUTTONS
+        function expandAll() {
+            document.querySelectorAll(".tree-children").forEach(el => el.classList.add("open"));
+            document.querySelectorAll(".toggle-icon").forEach(el => {
+                if (el.innerText === "▶") el.classList.add("expanded");
+            });
+        }
+
+        function collapseAll() {
+            document.querySelectorAll(".tree-children").forEach(el => el.classList.remove("open"));
+            document.querySelectorAll(".toggle-icon").forEach(el => el.classList.remove("expanded"));
+        }
+
+        function resetView() {
+            collapseAll();
+            document.getElementById("searchInput").value = "";
+            document.querySelectorAll(".node-name").forEach(el => el.classList.remove("highlight"));
+            // Open top level children
+            document.querySelectorAll("#corpTree > .tree-node > .tree-children").forEach(el => el.classList.add("open"));
+            document.querySelectorAll("#teamTree > .tree-node > .tree-children").forEach(el => el.classList.add("open"));
+            document.querySelectorAll("#sawtoothTree > .tree-node > .tree-children").forEach(el => el.classList.add("open"));
+        }
+
+        // SEARCH FILTER
+        document.getElementById("searchInput").addEventListener("input", function(e) {
+            const query = e.target.value.toLowerCase().trim();
+            if (!query) {
+                document.querySelectorAll(".node-name").forEach(el => el.classList.remove("highlight"));
+                return;
+            }
+
+            expandAll();
+
+            document.querySelectorAll(".tree-node").forEach(node => {
+                const nameEl = node.querySelector(".node-name");
+                if (nameEl) {
+                    const text = nameEl.innerText.toLowerCase();
+                    if (text.includes(query)) {
+                        nameEl.classList.add("highlight");
+                    } else {
+                        nameEl.classList.remove("highlight");
+                    }
+                }
+            });
+        });
+
+        // INIT ON LOAD
+        window.addEventListener("DOMContentLoaded", () => {
+            renderTree(treeData.corp, "corpTree", "ONEILL-CORPORATE", "O:\\Corporate");
+            renderTree(treeData.team, "teamTree", "ONEILL-TEAM", "O:\\Team");
+            renderTree(treeData.sawtooth, "sawtoothTree", "SAWTOOTH", "O:\\Sawtooth");
+
+            // Auto-select Projects node
+            setTimeout(() => {
+                const projNode = document.querySelectorAll("#teamTree .node-row")[4]; // 05-Projects
+                if (projNode) projNode.click();
+            }, 200);
+        });
+    </script>
+</body>
+</html>
