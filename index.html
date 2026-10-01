@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ONeill Contractors Inc. - Shared Drive Architecture (SOP-ADM-001 v3.3)</title>
+    <title>ONeill Contractors Inc. - Shared Drive Architecture (SOP-ADM-001 v3.4)</title>
     <style>
         :root {
             --navy: #0F2C59;
@@ -99,7 +99,7 @@
         .search-box {
             position: relative;
             flex: 1;
-            max-width: 480px;
+            max-width: 500px;
         }
 
         .search-box input {
@@ -274,6 +274,7 @@
 
         .node-tag.star { background-color: #FEFCBF; color: #B7791F; }
         .node-tag.restr { background-color: #FED7D7; color: #9B2C2C; }
+        .node-tag.prof { background-color: #EBF8FF; color: #2B6CB0; border: 1px solid #BEE3F8; }
 
         .tree-children {
             margin-left: 16px;
@@ -288,7 +289,7 @@
 
         /* DETAILS SIDE PANEL */
         .details-panel {
-            width: 400px;
+            width: 420px;
             background-color: var(--white);
             border-left: 1px solid var(--border);
             padding: 20px;
@@ -396,11 +397,11 @@
     <!-- HEADER -->
     <header>
         <div class="header-title">
-            <h1>ONeill Contractors Inc. <span class="badge">SOP-ADM-001 v3.3</span></h1>
-            <p>Interactive Enterprise Google Workspace Database Architecture Explorer</p>
+            <h1>ONeill Contractors Inc. <span class="badge">SOP-ADM-001 v3.4</span></h1>
+            <p>Master Document Control & Drive Architecture Gatekeeper Explorer</p>
         </div>
         <div class="header-meta">
-            Proposal Date: <strong>October 1, 2026</strong><br>
+            Proposed Date: <strong>October 1, 2026</strong><br>
             Personnel Scope: <strong>~50 Full-Time Staff</strong>
         </div>
     </header>
@@ -409,7 +410,7 @@
     <div class="toolbar">
         <div class="search-box">
             <span class="search-icon">🔍</span>
-            <input type="text" id="searchInput" placeholder="Search folders, clients, file names, or doc types (e.g. 'USACE', 'ARMY', 'QUO', 'Div-26')...">
+            <input type="text" id="searchInput" placeholder="Search folders, clients, profiles, or doc types (e.g. 'USACE', 'ARMY', 'QUO', 'Profile P')...">
         </div>
         <div class="btn-group">
             <button class="btn" onclick="expandAll()">📂 Expand All</button>
@@ -457,7 +458,7 @@
         <div class="details-panel" id="detailsPanel">
             <div class="panel-header">
                 <h2 id="panelTitle">Select a Folder or File</h2>
-                <p id="panelSub">Click any item in the tree to inspect security scope, SOP rules, and path budget math.</p>
+                <p id="panelSub">Click any item in the tree to inspect security scope, SOP v3.4 rules, and path budget math.</p>
             </div>
 
             <div class="detail-card">
@@ -471,8 +472,8 @@
                     <span class="info-val" id="infoDrive">-</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">SOP Category:</span>
-                    <span class="info-val" id="infoCategory">-</span>
+                    <span class="info-label">Naming Profile:</span>
+                    <span class="info-val" id="infoProfile">-</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Restricted Access:</span>
@@ -481,12 +482,12 @@
             </div>
 
             <div class="detail-card">
-                <h3>Local Path Length Budget Check</h3>
+                <h3>Local Mapped Path Budget (O:\)</h3>
                 <div class="path-preview" id="infoPath">O:\Team\...</div>
                 <div style="margin-top: 10px;">
                     <div style="display: flex; justify-content: space-between; font-size: 11px;">
                         <span>Path Length: <strong id="infoLength">0</strong> chars</span>
-                        <span>Target Limit: <strong>210 chars</strong></span>
+                        <span>Hard Limit: <strong>230 chars</strong></span>
                     </div>
                     <div class="progress-bar-bg">
                         <div class="progress-bar-fill" id="infoProgress"></div>
@@ -498,9 +499,9 @@
             </div>
 
             <div class="detail-card">
-                <h3>Lifecycle & SOP-ADM-001 v3.3 Directive</h3>
+                <h3>Lifecycle & SOP-ADM-001 v3.4 Rules Engine</h3>
                 <p style="font-size: 11.5px; color: var(--charcoal); line-height: 1.4;" id="infoDescription">
-                    SOP-ADM-001 v3.3 treats Google Drive as a structured relational database. It uses universal agency acronyms (USACE, ARMY, NAVFAC) and AI-Self-Describing standalone file names with zero intermediate phase folders.
+                    SOP-ADM-001 v3.4 enforces 3 Zone Naming Profiles (Project, Non-Project, Controlled Document), restructures 04-Estimating for cross-project assets only, and uses a Gatekeeper Service Account to execute folder moves and version supersessions.
                 </p>
             </div>
         </div>
@@ -513,108 +514,142 @@
             return [
                 {
                     name: "01-Contracts",
-                    desc: "Prime contract, Notice of Award, bonds, COIs, tax certs, reps & certs.",
+                    desc: "Proposals, bonds, reps and certs, prime contract, Notice of Award, COIs, badging forms.",
+                    profile: "Profile P (Project)",
                     children: [
-                        { name: prjCode + "_ADM_GEN_PerformanceBond_2026-10-01_v1.pdf", isFile: true, docType: "ADM" }
+                        { name: prjCode + "_ADM_GEN_Performance-Bond_2026-10-01_v1.pdf", isFile: true, docType: "ADM", profile: "Profile P" },
+                        { name: prjCode + "_BND_GEN_Bid-Bond-Certificate_2026-10-01_v1.pdf", isFile: true, docType: "BND", profile: "Profile P" },
+                        { name: prjCode + "_CNTR_GEN_Prime-Contract-Executed_2026-10-01_v1.pdf", isFile: true, docType: "CNTR", profile: "Profile P" }
                     ]
                 },
                 {
                     name: "02-Plans-Specs",
-                    desc: "Client bid solicitations, drawings, specs, addenda 0001-0008, UFGS specs.",
+                    desc: "Solicitations, RFP documents, drawings, specifications and UFGS sections, addenda.",
+                    profile: "Profile P (Project)",
                     children: [
-                        { name: prjCode + "_DWG_Sec-033000_ArchitecturalPlans_2026-10-01_v1.pdf", isFile: true, docType: "DWG" }
+                        { name: prjCode + "_SOL_GEN_Client-RFP-Solicitation_2026-10-01_v1.pdf", isFile: true, docType: "SOL", profile: "Profile P" },
+                        { name: prjCode + "_DWG_Sec-033000_Architectural-Plans_2026-10-01_v1.pdf", isFile: true, docType: "DWG", profile: "Profile P" },
+                        { name: prjCode + "_SPC_Sec-033000_Cast-In-Place-Concrete_2026-10-01_v1.pdf", isFile: true, docType: "SPC", profile: "Profile P" }
                     ]
                 },
                 {
                     name: "03-Submittals",
-                    desc: "Pre-con submittal register, material approval packages, shop drawings, SDS.",
+                    desc: "Submittal register, material approval packages, cut sheets, shop drawings, SDS.",
+                    profile: "Profile P (Project)",
                     children: [
-                        { name: prjCode + "_SUB_Div-07_TPO-RoofMembrane_2026-10-01_v1.pdf", isFile: true, docType: "SUB" }
+                        { name: prjCode + "_SUB_Div-07-ThermalMoist_TPO-Roof-Membrane_2026-10-01_v1.pdf", isFile: true, docType: "SUB", profile: "Profile P" },
+                        {
+                            name: "_Superseded",
+                            desc: "Permitted nested folder for prior versions of submittals.",
+                            children: [
+                                { name: prjCode + "_SUB_Div-07-ThermalMoist_TPO-Roof-Membrane_2026-09-15_v0.1.pdf", isFile: true, docType: "SUB", profile: "Profile P" }
+                            ]
+                        }
                     ]
                 },
                 {
                     name: "04-RFIs",
                     desc: "Pre-proposal inquiries (PPIs), formal Requests for Information, owner answer logs.",
+                    profile: "Profile P (Project)",
                     children: [
-                        { name: prjCode + "_RFI_Div-03_001-FoundationDepth_2026-10-01_v1.pdf", isFile: true, docType: "RFI" }
+                        { name: prjCode + "_RFI_Div-03-Concrete_001-Foundation-Depth_2026-10-01_v1.pdf", isFile: true, docType: "RFI", profile: "Profile P" }
                     ]
                 },
                 {
                     name: "05-COs",
-                    desc: "Change Order Requests (CORs), contract modifications, scope credits, pricing backup.",
+                    desc: "Change order requests (CORs), contract modifications, scope credits, pricing backup.",
+                    profile: "Profile P (Project)",
                     children: [
-                        { name: prjCode + "_CO_Div-26_002-WallCredit_2026-10-01_v1.pdf", isFile: true, docType: "CO" }
+                        { name: prjCode + "_CO_Div-26-Electrical_002-Wall-Credit_2026-10-01_v1.pdf", isFile: true, docType: "CO", profile: "Profile P" }
                     ]
                 },
-                { name: "06-Meetings", desc: "Pre-bid site visit notes, pre-con minutes, weekly progress meeting notes." },
+                { name: "06-Meetings", desc: "Pre-bid and pre-construction minutes, progress meetings, OAC agendas.", profile: "Profile P" },
                 {
                     name: "07-Schedule",
-                    desc: "Preliminary bid schedule, baseline CPM schedule (.mpp & PDF), look-aheads.",
+                    desc: "Preliminary bid schedule, baseline CPM schedule (.mpp, .xer, PDF), look-aheads, updates.",
+                    profile: "Profile P (Project)",
                     children: [
-                        { name: prjCode + "_SCH_GEN_BaselineCPM_2026-10-01_v1.mpp", isFile: true, docType: "SCH" }
+                        { name: prjCode + "_SCH_GEN_Baseline-CPM-Schedule_2026-10-01_v1.mpp", isFile: true, docType: "SCH", profile: "Profile P" }
                     ]
                 },
                 {
                     name: "08-Budget",
-                    desc: "Internal bid sheet, takeoffs, living Schedule of Values (SOV), cost forecasts.",
+                    desc: "Internal bid sheet, takeoffs, living Schedule of Values (SOV), cost forecasts, job-cost logs.",
+                    profile: "Profile P (Project)",
                     children: [
-                        { name: prjCode + "_EST_GEN_InternalBidSheet_2026-10-01_v1.xlsx", isFile: true, docType: "EST" }
+                        { name: prjCode + "_EST_GEN_Internal-Bid-Sheet_2026-10-01_v1.xlsx", isFile: true, docType: "EST", profile: "Profile P" }
                     ]
                 },
                 {
                     name: "09-Pay-Apps",
-                    desc: "Monthly prime contractor payment applications, SOV sign-offs, lien waivers.",
+                    desc: "Prime contractor payment applications, SOV sign-offs, lien waivers, certified payrolls.",
+                    profile: "Profile P (Project)",
                     children: [
-                        { name: prjCode + "_PAY_GEN_App01-Final_2026-10-01_v1.pdf", isFile: true, docType: "PAY" }
+                        { name: prjCode + "_PAY_GEN_App01-Final-Owner-Billing_2026-10-01_v1.pdf", isFile: true, docType: "PAY", profile: "Profile P" },
+                        { name: prjCode + "_LW_GEN_Partial-Lien-Waiver_2026-10-01_v1.pdf", isFile: true, docType: "LW", profile: "Profile P" }
                     ]
                 },
-                { name: "10-Corr", desc: "Client correspondence, formal notices, contractual owner letters, email logs." },
+                { name: "10-Corr", desc: "Client correspondence, formal notices, contractual owner letters, critical email.", profile: "Profile P" },
                 {
                     name: "11-Safety",
-                    desc: "Site-specific APP, Activity Hazard Analyses (AHAs), EPP, SSHO daily logs.",
+                    desc: "Site-specific APP, Activity Hazard Analyses (AHAs), EPP, SSHO daily logs, equipment inspections.",
+                    profile: "Profile P (Project)",
                     children: [
-                        { name: prjCode + "_SAF_Div-07_FallProtectionAHA_2026-10-01_v1.pdf", isFile: true, docType: "SAF" }
+                        { name: prjCode + "_SAF_Div-07-ThermalMoist_Fall-Protection-AHA_2026-10-01_v1.pdf", isFile: true, docType: "SAF", profile: "Profile P" }
                     ]
                 },
                 {
                     name: "12-Dailies",
-                    desc: "Daily production reports, daily QC reports, site sign-in sheets, weather logs.",
+                    desc: "Daily production reports, daily QC reports, sign-in sheets, weather logs, NCRs.",
+                    profile: "Profile P (Project)",
                     children: [
-                        { name: prjCode + "_RPT_GEN_DailyQCReport_2026-10-01_v1.pdf", isFile: true, docType: "RPT" }
+                        { name: prjCode + "_RPT_GEN_Daily-QC-Report_2026-10-01_v1.pdf", isFile: true, docType: "RPT", profile: "Profile P" },
+                        { name: prjCode + "_NCR_Div-03-Concrete_001-Slab-Crack-Deficiency_2026-10-01_v1.pdf", isFile: true, docType: "NCR", profile: "Profile P" }
                     ]
                 },
                 {
                     name: "13-Subs",
-                    desc: "Subcontractor trade proposals organized by CSI MasterFormat Division (Div-01 to Div-48).",
+                    desc: "Subcontractor trade proposals organized strictly by canonical MasterFormat Division (Div-01 to Div-48).",
+                    profile: "Profile P (Project)",
                     children: [
                         {
                             name: "Div-03-Concrete",
-                            desc: "CSI Division 03 Concrete trade quotes.",
+                            desc: "Canonical CSI Division 03 Concrete subfolder.",
                             children: [
-                                { name: prjCode + "_QUO_Div-03_ReadyMixConcreteQuote_2026-10-01_v1.pdf", isFile: true, docType: "QUO" }
+                                { name: prjCode + "_QUO_Div-03-Concrete_Ready-Mix-Quote_2026-10-01_v1.pdf", isFile: true, docType: "QUO", profile: "Profile P" }
                             ]
                         },
                         {
                             name: "Div-26-Electrical",
-                            desc: "CSI Division 26 Electrical trade quotes.",
+                            desc: "Canonical CSI Division 26 Electrical subfolder.",
                             children: [
-                                { name: prjCode + "_QUO_Div-26_EatonElectricProposal_2026-10-01_v1.pdf", isFile: true, docType: "QUO" }
+                                { name: prjCode + "_QUO_Div-26-Electrical_Eaton-Switchgear-Proposal_2026-10-01_v1.pdf", isFile: true, docType: "QUO", profile: "Profile P" },
+                                { name: prjCode + "_CNTR_Div-26-Electrical_Eaton-Subcontract_2026-10-01_v1.pdf", isFile: true, docType: "CNTR", profile: "Profile P" }
                             ]
                         }
                     ]
                 },
                 {
                     name: "14-Photos",
-                    desc: "Pre-con site photos, progress photos, aerial drone footage, site walk videos.",
+                    desc: "Pre-con site photos, progress photos, drone footage, site-walk video. Uses 3-digit sequence numbers.",
+                    profile: "Profile P (Project)",
                     children: [
-                        { name: prjCode + "_PHO_GEN_PreConSiteWalk_2026-10-01_v1.jpg", isFile: true, docType: "PHO" }
+                        {
+                            name: "2026-10-01",
+                            desc: "Permitted YYYY-MM-DD date subfolder.",
+                            children: [
+                                { name: prjCode + "_PHO_GEN_PreCon-Site-Walk_2026-10-01_001.jpg", isFile: true, docType: "PHO", profile: "Profile P (Photo Seq)" },
+                                { name: prjCode + "_PHO_GEN_PreCon-Site-Walk_2026-10-01_002.jpg", isFile: true, docType: "PHO", profile: "Profile P (Photo Seq)" }
+                            ]
+                        }
                     ]
                 },
                 {
                     name: "15-Closeout",
-                    desc: "O&M manuals, manufacturer warranties, as-built CAD drawings, CPARS ratings.",
+                    desc: "O&M manuals, manufacturer warranties, as-built CAD drawings, CPARS ratings, punchlist sign-offs.",
+                    profile: "Profile P (Project)",
                     children: [
-                        { name: prjCode + "_CLO_Div-07_RoofWarranty_2026-10-01_v1.pdf", isFile: true, docType: "CLO" }
+                        { name: prjCode + "_CLO_Div-07-ThermalMoist_Roof-Warranty_2026-10-01_v1.pdf", isFile: true, docType: "CLO", profile: "Profile P" }
                     ]
                 }
             ];
@@ -625,75 +660,81 @@
                 {
                     name: "01-Legal",
                     desc: "Restricted corporate legal records, board resolutions, litigation files, JV agreements.",
-                    access: "C-Suite / Drive Admin",
+                    access: "onc-executives@ (Content Mgr)",
                     restr: true,
+                    profile: "Profile N / Profile C",
                     children: [
-                        { name: "Corp-Governance", desc: "Board resolutions, operating agreements, stock registers." },
-                        { name: "Contracts-Agmts", desc: "Master corporate contracts, strategic JV agreements." },
-                        { name: "Litigation-Claims", desc: "Legal dispute documentation and counsel letters." },
-                        { name: "Compliance", desc: "Regulatory compliance filings and corporate licensing audits." }
+                        { name: "01-Corp-Governance", desc: "Board resolutions, operating agreements, stock registers." },
+                        { name: "02-Contracts-Agmts", desc: "Master corporate contracts, strategic JV agreements." },
+                        { name: "03-Litigation-Claims", desc: "Legal dispute documentation and counsel letters." },
+                        { name: "04-Compliance", desc: "Regulatory compliance filings and corporate licensing audits." }
                     ]
                 },
                 {
                     name: "02-Planning",
                     desc: "C-Suite strategic planning, expansion research, advisory board packages.",
-                    access: "C-Suite / Drive Admin",
+                    access: "onc-executives@ (Content Mgr)",
                     restr: true,
+                    profile: "Profile N",
                     children: [
-                        { name: "Strategic-Plans", desc: "Multi-year corporate growth roadmaps and revenue targets." },
-                        { name: "Market-Analysis", desc: "Regional market expansion research and feasibility studies." },
-                        { name: "Growth-Initiatives", desc: "New service line development and capital acquisition." },
-                        { name: "Board-Advisory", desc: "Board meeting decks and advisory committee briefs." }
+                        { name: "01-Strategic-Plans", desc: "Multi-year corporate growth roadmaps and revenue targets." },
+                        { name: "02-Market-Analysis", desc: "Regional market expansion research and feasibility studies." },
+                        { name: "03-Growth-Initiatives", desc: "New service line development and capital acquisition." },
+                        { name: "04-Board-Advisory", desc: "Board meeting decks and advisory committee briefs." }
                     ]
                 },
                 {
                     name: "03-Financial",
                     desc: "Executive financial statements, banking lines, bonding capacity, tax strategy.",
-                    access: "C-Suite / Drive Admin",
+                    access: "onc-executives@ (Content Mgr)",
                     restr: true,
+                    profile: "Profile N",
                     children: [
-                        { name: "Exec-Reports", desc: "Monthly/quarterly P&L, balance sheets, cash flow models." },
-                        { name: "Banking-Credit", desc: "Lines of credit, treasury management, banking covenants." },
-                        { name: "Bonding-Surety", desc: "Bonding capacity reports and underwriter submission packages." },
-                        { name: "Tax-Strategy", desc: "Corporate tax planning, CPA filings, R&D credits." },
-                        { name: "MA-Investments", desc: "Merger & acquisition evaluations, asset purchase records." }
+                        { name: "01-Exec-Reports", desc: "Monthly/quarterly P&L, balance sheets, cash flow models." },
+                        { name: "02-Banking-Credit", desc: "Lines of credit, treasury management, banking covenants." },
+                        { name: "03-Bonding-Surety", desc: "Bonding capacity reports and underwriter submission packages." },
+                        { name: "04-Tax-Strategy", desc: "Corporate tax planning, CPA filings, R&D credits." },
+                        { name: "05-MA-Investments", desc: "Merger & acquisition evaluations, asset purchase records." }
                     ]
                 },
                 {
                     name: "04-HR",
                     desc: "Confidential personnel files, executive compensation, performance appraisals.",
-                    access: "C-Suite / Drive Admin",
+                    access: "HR Director & President Only",
                     restr: true,
+                    profile: "Profile N",
                     children: [
-                        { name: "Employee-Records", desc: "Confidential personnel folders, I-9 verifications, background checks." },
-                        { name: "Comp-Benefits", desc: "Executive compensation plans, health insurance, 401(k) records." },
-                        { name: "Perf-Mgmt", desc: "Annual performance appraisals and bonus structures." },
-                        { name: "Succession-Plan", desc: "C-suite leadership continuity plans." },
-                        { name: "Recruiting", desc: "Executive search records and talent acquisition pipelines." }
+                        { name: "01-Employee-Records", desc: "Confidential personnel folders, I-9 verifications, background checks.", restr: true },
+                        { name: "02-Comp-Benefits", desc: "Executive compensation plans, health insurance, 401(k) records." },
+                        { name: "03-Perf-Mgmt", desc: "Annual performance appraisals and bonus structures." },
+                        { name: "04-Succession-Plan", desc: "C-suite leadership continuity plans." },
+                        { name: "05-Recruiting", desc: "Executive search records and talent acquisition pipelines." }
                     ]
                 },
                 {
                     name: "05-Info-Technology",
                     desc: "IT governance, enterprise software licenses, backup & disaster protocols.",
-                    access: "C-Suite / Drive Admin",
+                    access: "onc-executives@ (Content Mgr)",
                     restr: true,
+                    profile: "Profile N / Profile C",
                     children: [
-                        { name: "IT-Strategy", desc: "Enterprise technology architecture plans and cloud roadmaps." },
-                        { name: "Software-Lic", desc: "Google Workspace, Procore, Estimating software licensing." },
-                        { name: "Infrastructure", desc: "Network topography, hardware assets, security configurations." },
-                        { name: "Disaster-Recovery", desc: "Data backup protocols, cyber insurance, incident response." }
+                        { name: "01-IT-Strategy", desc: "Enterprise technology architecture plans and cloud roadmaps." },
+                        { name: "02-Software-Lic", desc: "Google Workspace, Procore, Estimating software licensing." },
+                        { name: "03-Infrastructure", desc: "Network topography, hardware assets, security configurations." },
+                        { name: "04-Disaster-Recovery", desc: "Data backup protocols, cyber insurance, incident response." }
                     ]
                 },
                 {
                     name: "06-Operations",
                     desc: "Executive project KPIs, fleet management, resource allocation models.",
-                    access: "C-Suite / Drive Admin",
+                    access: "onc-executives@ (Content Mgr)",
                     restr: true,
+                    profile: "Profile N",
                     children: [
-                        { name: "Exec-Project-Oversight", desc: "High-level Work-in-Progress (WIP) tracking reports." },
-                        { name: "Resource-Allocation", desc: "Superintendent/PM staffing allocation models." },
-                        { name: "Fleet-Equipment", desc: "Vehicle titles, heavy machinery acquisition & depreciation." },
-                        { name: "Perf-Dashboards", desc: "Executive gross margin KPI dashboards." }
+                        { name: "01-Exec-Project-Oversight", desc: "High-level Work-in-Progress (WIP) tracking reports." },
+                        { name: "02-Resource-Allocation", desc: "Superintendent/PM staffing allocation models." },
+                        { name: "03-Fleet-Equipment", desc: "Vehicle titles, heavy machinery acquisition & depreciation." },
+                        { name: "04-Perf-Dashboards", desc: "Executive gross margin KPI dashboards." }
                     ]
                 }
             ],
@@ -701,58 +742,91 @@
                 {
                     name: "01-Administrative",
                     desc: "General company admin, master templates, vendor lists, corporate insurance.",
-                    access: "All Staff (Contributor)",
+                    access: "All Staff (Viewer) / Admin (Content Mgr)",
+                    profile: "Profile N (Non-Project)",
                     children: [
-                        { name: "Company-Policies", desc: "Employee handbooks, general SOPs, safety policy manuals." },
-                        { name: "Insurance-Bond", desc: "Certificates of Insurance (COIs), standard project bond forms." },
-                        { name: "Licenses-Permits", desc: "State contractor licenses, municipal business permits." },
-                        { name: "Vendor-Supplier", desc: "Approved vendor lists, master supplier credit agreements." },
-                        { name: "Templates-Forms", desc: "Official company document templates, letterheads, billing forms." },
-                        { name: "Office-Mgmt", desc: "Office facilities leases, utility accounts, supply orders." }
+                        {
+                            name: "01-Company-Policies",
+                            desc: "Employee handbooks, general SOPs, safety policy manuals.",
+                            children: [
+                                { name: "POL_Safety-Policy-Manual_2026-01-10_v3.pdf", isFile: true, docType: "POL", profile: "Profile N" }
+                            ]
+                        },
+                        { name: "02-Insurance-Bond", desc: "Certificates of Insurance (COIs), standard project bond forms." },
+                        { name: "03-Licenses-Permits", desc: "State contractor licenses, municipal business permits." },
+                        {
+                            name: "04-Vendor-Supplier",
+                            desc: "Approved vendor lists, master supplier credit agreements.",
+                            children: [
+                                { name: "AGMT_Master-Vendor-Agreement_2026-03-01_v1.pdf", isFile: true, docType: "AGMT", profile: "Profile N" }
+                            ]
+                        },
+                        {
+                            name: "05-Templates-Forms",
+                            desc: "Official company document templates, letterheads, billing forms.",
+                            children: [
+                                { name: "FRM_Daily-Report-Template_2026-01-15_v1.xlsx", isFile: true, docType: "FRM", profile: "Profile N" }
+                            ]
+                        },
+                        { name: "06-Office-Mgmt", desc: "Office facilities leases, utility accounts, supply orders." }
                     ]
                 },
                 {
                     name: "02-Accounting",
                     desc: "Daily accounting hub for subcontractor invoices, billings, and job costs.",
-                    access: "All Staff / Restricted Payroll",
+                    access: "onc-accounting@ (Content Mgr)",
+                    profile: "Profile N (Non-Project)",
                     children: [
-                        { name: "Accts-Payable", desc: "Subcontractor/vendor invoices, payment receipts, lien waivers." },
-                        { name: "Accts-Receivable", desc: "Client billing logs, incoming payment confirmations." },
-                        { name: "Payroll [Restricted]", desc: "Weekly timesheets, certified payroll reports (Restricted Access).", restr: true },
-                        { name: "Budgets-Fcst", desc: "Operating budget models, overhead forecasting spreadsheets." },
-                        { name: "Tax-Compl [R]", desc: "Sales tax exemption certificates, quarterly payroll tax filings.", restr: true },
-                        { name: "Financial-Reports", desc: "Job cost accounting reports, WIP schedules." }
+                        { name: "01-Accts-Payable", desc: "Subcontractor/vendor invoices, payment receipts, lien waivers." },
+                        { name: "02-Accts-Receivable", desc: "Client billing logs, incoming payment confirmations." },
+                        { name: "03-Payroll", desc: "Weekly timesheets, certified payroll reports (Restricted Access).", restr: true },
+                        { name: "04-Budgets-Fcst", desc: "Operating budget models, overhead forecasting spreadsheets." },
+                        { name: "05-Tax-Compl", desc: "Sales tax exemption certificates, quarterly payroll tax filings (Restricted Access).", restr: true },
+                        {
+                            name: "06-Financial-Reports",
+                            desc: "Job cost accounting reports, WIP schedules.",
+                            children: [
+                                { name: "FIN_Job-Cost-WIP-Report_2026-09-30_v1.pdf", isFile: true, docType: "FIN", profile: "Profile N" }
+                            ]
+                        }
                     ]
                 },
                 {
                     name: "03-Project-Pursuit",
                     desc: "Business development tracking for incoming RFPs and pre-qualification packages.",
-                    access: "All Staff (Contributor)",
+                    access: "onc-estimating@ (Content Mgr)",
+                    profile: "Profile N (Non-Project)",
                     children: [
-                        { name: "Active-Leads", desc: "Incoming bid opportunities, business development pipeline tracking." },
-                        { name: "Pre-Qualification", desc: "Owner pre-qualification packages, SF330 submissions." },
-                        { name: "Go-No-Go", desc: "Project evaluation scorecards, risk assessment forms." },
-                        { name: "Pursuit-Templates", desc: "Standard proposal templates, capability statement graphics." }
+                        { name: "01-Active-Leads", desc: "Incoming bid opportunities, business development pipeline tracking." },
+                        {
+                            name: "02-Pre-Qualification",
+                            desc: "Owner pre-qualification packages, SF330 submissions.",
+                            children: [
+                                { name: "PROP_SF330-Prequalification-Deck_2026-05-12_v1.pdf", isFile: true, docType: "PROP", profile: "Profile N" }
+                            ]
+                        },
+                        { name: "03-Go-No-Go", desc: "Project evaluation scorecards, risk assessment forms." },
+                        { name: "04-Pursuit-Templates", desc: "Standard proposal templates, capability statement graphics." }
                     ]
                 },
                 {
                     name: "04-Estimating",
-                    desc: "Global bidding hub. Holds active takeoffs, submitted client pricing proposals, sub quotes.",
-                    access: "All Staff (Contributor)",
+                    desc: "RESTRUCTURED IN v3.4: Holds cross-project estimating assets only. No project files sit here!",
+                    access: "onc-estimating@ (Content Mgr)",
+                    profile: "Profile N (Non-Project)",
                     children: [
-                        { name: "Active-Bids", desc: "Work-in-progress estimates currently out for pricing." },
-                        { name: "Submitted-Proposals", desc: "Final pricing proposals submitted to clients awaiting award." },
-                        { name: "Won-Awarded", desc: "Successful bids transitioning to 05-Projects." },
-                        { name: "Lost-No-Bid", desc: "Archived estimates for unsuccessful proposals." },
-                        { name: "Bid-Templates", desc: "Standard estimating spreadsheets, unit rate databases." },
-                        { name: "Sub-Quotes", desc: "Subcontractor trade quote repositories organized by CSI Divisions 01 to 48." }
+                        { name: "01-Bid-Templates", desc: "Standard estimating spreadsheets, unit rate databases." },
+                        { name: "02-Rate-Library", desc: "Master historical labor and equipment rate spreadsheets." },
+                        { name: "03-Sub-Database", desc: "Master subcontractor trade database and performance logs." },
+                        { name: "04-Bid-Reports", desc: "Cross-project win/loss reporting and quarterly bid metrics." }
                     ]
                 },
                 {
                     name: "05-Projects ★",
-                    desc: "MASTER ACTIVE PROJECT HUB! Houses individual project containers organized under official Client Agency folders.",
-                    access: "All Staff (Contributor)",
+                    desc: "MASTER ACTIVE PROJECT HUB! Houses individual project containers organized strictly under Client Agency Folders.",
+                    access: "onc-projectmgrs@ / onc-estimating@ (Contributor)",
                     star: true,
+                    profile: "Profile P (Project)",
                     children: [
                         {
                             name: "USACE",
@@ -827,99 +901,120 @@
                 {
                     name: "06-CPE",
                     desc: "Continuous Professional Education platform containing employee training and SOPs.",
-                    access: "All Staff (Contributor)",
+                    access: "onc-allstaff@ (Viewer) / CPE (Content Mgr)",
+                    profile: "Profile N / Profile C",
                     children: [
-                        { name: "Training-Prog", desc: "Internal training modules and onboarding materials." },
-                        { name: "OSHA-Safety", desc: "OSHA 10/30 training records, toolbox talk libraries." },
-                        { name: "Cont-Education", desc: "Professional licensing credits and seminar notes." },
-                        { name: "Mentorship", desc: "PM and superintendent development frameworks." },
-                        { name: "Knowledge-Base", desc: "Lessons learned database and technical construction SOPs." }
+                        { name: "01-Training-Prog", desc: "Internal training modules and onboarding materials." },
+                        { name: "02-OSHA-Safety", desc: "OSHA 10/30 training records, toolbox talk libraries." },
+                        { name: "03-Cont-Education", desc: "Professional licensing credits and seminar notes." },
+                        { name: "04-Mentorship", desc: "PM and superintendent development frameworks." },
+                        {
+                            name: "05-Knowledge-Base",
+                            desc: "Lessons learned database and official controlled SOP documents.",
+                            children: [
+                                { name: "ONeill_SOP-ADM-001_Master-Drive-Architecture_2026-10-01_v3-4.docx", isFile: true, docType: "SOP", profile: "Profile C (Controlled)" }
+                            ]
+                        }
                     ]
                 },
                 {
                     name: "07-Marketing",
                     desc: "Marketing assets hub containing logos, project photos, staff resumes, and proposals.",
-                    access: "All Staff (Contributor)",
+                    access: "onc-marketing@ (Content Mgr)",
+                    profile: "Profile N (Non-Project)",
                     children: [
-                        { name: "Brand-Assets", desc: "High-res company logos, brand guidelines, color palettes." },
-                        { name: "Project-Portfolio", desc: "Finished project write-ups and case studies." },
-                        { name: "Proposals-Quals", desc: "Marketing graphics, staff resume packages, capability statements." },
-                        { name: "Website-Social", desc: "Website content, press releases, social media media assets." },
-                        { name: "Media-Assets", desc: "Jobsite photography and drone video walkthrough footage." }
+                        { name: "01-Brand-Assets", desc: "High-res company logos, brand guidelines, color palettes." },
+                        { name: "02-Project-Portfolio", desc: "Finished project write-ups and case studies." },
+                        {
+                            name: "03-Proposals-Quals",
+                            desc: "Marketing graphics, staff resume packages, capability statements.",
+                            children: [
+                                { name: "MKT_Capabilities-Statement_2026-02-01_v2.pdf", isFile: true, docType: "MKT", profile: "Profile N" }
+                            ]
+                        },
+                        { name: "04-Website-Social", desc: "Website content, press releases, social media assets." },
+                        { name: "05-Media-Assets", desc: "Jobsite photography and drone video walkthrough footage." }
                     ]
                 }
             ],
             sawtooth: [
                 {
-                    name: "01-Administrative-JV",
+                    name: "01-Administrative",
                     desc: "JV agreement documents, JV insurance policies, joint bonding capacity certs.",
-                    access: "Sawtooth JV Members",
+                    access: "sawtooth-team@ (Contributor)",
+                    profile: "Profile N (Non-Project)",
                     children: [
-                        { name: "Policies-JV", desc: "Joint venture policies and co-branded SOPs." },
-                        { name: "Insurance-Bond-JV", desc: "JV specific insurance policies and joint bonds." }
+                        { name: "01-Policies-JV", desc: "Joint venture policies and co-branded SOPs." },
+                        { name: "02-Insurance-Bond-JV", desc: "JV specific insurance policies and joint bonds." }
                     ]
                 },
                 {
-                    name: "02-Accounting-JV",
+                    name: "02-Accounting",
                     desc: "Dedicated accounting records for JV bank accounts, partner capital calls, billings.",
-                    access: "Sawtooth JV Accounting",
+                    access: "sawtooth-team@ (Contributor)",
+                    profile: "Profile N (Non-Project)",
                     children: [
-                        { name: "AP-JV", desc: "JV subcontractor invoices and vendor receipts." },
-                        { name: "AR-JV", desc: "Client pay applications and partner capital calls." }
+                        { name: "01-AP-JV", desc: "JV subcontractor invoices and vendor receipts." },
+                        { name: "02-AR-JV", desc: "Client pay applications and partner capital calls." }
                     ]
                 },
                 {
-                    name: "03-Project-Pursuit-JV",
+                    name: "03-Project-Pursuit",
                     desc: "Joint pursuit tracking for major federal MATOC/SATOC opportunities.",
-                    access: "Sawtooth JV Pursuit",
+                    access: "sawtooth-team@ (Contributor)",
+                    profile: "Profile N (Non-Project)",
                     children: [
-                        { name: "Active-Leads-JV", desc: "Shared JV lead pipeline." },
-                        { name: "Pre-Qual-JV", desc: "Joint SF330 submission packages." }
+                        { name: "01-Active-Leads-JV", desc: "Shared JV lead pipeline." },
+                        { name: "02-Pre-Qual-JV", desc: "Joint SF330 submission packages." }
                     ]
                 },
                 {
-                    name: "04-Estimating-JV",
+                    name: "04-Estimating",
                     desc: "Joint estimating workspace for shared takeoffs and partner pricing reviews.",
-                    access: "Sawtooth JV Estimating",
+                    access: "sawtooth-team@ (Contributor)",
+                    profile: "Profile N (Non-Project)",
                     children: [
-                        { name: "Active-Bids-JV", desc: "Work-in-progress JV takeoffs." },
-                        { name: "Sub-Quotes-JV", desc: "Combined subcontractor trade quote repository." }
+                        { name: "01-Bid-Templates-JV", desc: "Work-in-progress JV takeoffs." },
+                        { name: "02-Sub-Database-JV", desc: "Combined subcontractor trade quote repository." }
                     ]
                 },
                 {
-                    name: "05-Projects-JV ★",
-                    desc: "Active JV project hub. Houses individual Sawtooth project folders using YY-SAW-### prefix.",
-                    access: "Sawtooth JV Team",
+                    name: "05-Projects ★",
+                    desc: "Active JV project hub. Houses individual Sawtooth projects filed under end-client folders.",
+                    access: "sawtooth-team@ (Contributor)",
                     star: true,
+                    profile: "Profile P (Project)",
                     children: [
                         {
-                            name: "SAW",
-                            desc: "Joint Venture Client Folder.",
+                            name: "ARMY",
+                            desc: "Joint Venture End-Client Folder (U.S. Army).",
                             children: [
                                 {
-                                    name: "26-SAW-001_FortMcCoy-Barracks",
+                                    name: "26-ARMY-001_FortMcCoy-Barracks",
                                     desc: "JOINT VENTURE SINGLE PROJECT CONTAINER.",
                                     isProject: true,
-                                    children: get15Subfolders("26-SAW-001")
+                                    children: get15Subfolders("26-ARMY-001")
                                 }
                             ]
                         }
                     ]
                 },
                 {
-                    name: "06-CPE-JV",
+                    name: "06-CPE",
                     desc: "Joint venture site safety protocols and partner EM 385-1-1 compliance manuals.",
-                    access: "Sawtooth JV Members",
+                    access: "sawtooth-team@ (Contributor)",
+                    profile: "Profile N (Non-Project)",
                     children: [
-                        { name: "Safety-JV", desc: "Joint safety plans and EM 385-1-1 manuals." }
+                        { name: "01-Safety-JV", desc: "Joint safety plans and EM 385-1-1 manuals." }
                     ]
                 },
                 {
-                    name: "07-Marketing-JV",
+                    name: "07-Marketing",
                     desc: "Co-branded marketing collateral, JV project photography, press releases.",
-                    access: "Sawtooth JV Members",
+                    access: "sawtooth-team@ (Contributor)",
+                    profile: "Profile N (Non-Project)",
                     children: [
-                        { name: "Brand-Assets-JV", desc: "Co-branded logos and presentation graphics." }
+                        { name: "01-Brand-Assets-JV", desc: "Co-branded logos and presentation graphics." }
                     ]
                 }
             ]
@@ -972,7 +1067,7 @@
             nameSpan.innerText = item.name;
             rowDiv.appendChild(nameSpan);
 
-            // Tag
+            // Tags
             if (item.star) {
                 const tagSpan = document.createElement("span");
                 tagSpan.className = "node-tag star";
@@ -982,6 +1077,11 @@
                 const tagSpan = document.createElement("span");
                 tagSpan.className = "node-tag restr";
                 tagSpan.innerText = "RESTRICTED";
+                rowDiv.appendChild(tagSpan);
+            } else if (item.profile && item.isFile) {
+                const tagSpan = document.createElement("span");
+                tagSpan.className = "node-tag prof";
+                tagSpan.innerText = item.profile;
                 rowDiv.appendChild(tagSpan);
             }
 
@@ -1032,27 +1132,31 @@
 
             document.getElementById("infoDrive").innerText = driveName;
             document.getElementById("infoAccess").innerText = item.access || (driveName.includes("CORPORATE") ? "C-Suite / Admin" : "All Staff (Contributor)");
-            document.getElementById("infoCategory").innerText = item.isFile ? "Document (" + (item.docType || "PDF") + ")" : (item.isProject ? "Project Container" : "Directory Folder");
-            document.getElementById("infoRestricted").innerText = item.restr ? "YES (C-Suite Only)" : "NO (Standard)";
+            document.getElementById("infoProfile").innerText = item.profile || (fullPath.includes("05-Projects") ? "Profile P (Project)" : "Profile N (Non-Project)");
+            document.getElementById("infoRestricted").innerText = item.restr ? "YES (Restricted Access)" : "NO (Standard)";
 
             document.getElementById("infoPath").innerText = fullPath;
             const pathLen = fullPath.length;
             document.getElementById("infoLength").innerText = pathLen;
 
             const progressFill = document.getElementById("infoProgress");
-            const pct = Math.min(100, Math.round((pathLen / 210) * 100));
+            const pct = Math.min(100, Math.round((pathLen / 230) * 100));
             progressFill.style.width = pct + "%";
 
-            if (pathLen > 210) {
+            if (pathLen > 230) {
                 progressFill.style.backgroundColor = "var(--red)";
-                document.getElementById("infoBuffer").innerHTML = "<span style='color: var(--red);'>⚠️ WARNING: Exceeds Target 210 Char Limit</span>";
+                document.getElementById("infoBuffer").innerHTML = "<span style='color: var(--red);'>⚠️ EXCEEDS HARD LIMIT (230 Chars)</span>";
+            } else if (pathLen > 210) {
+                progressFill.style.backgroundColor = "var(--orange)";
+                const buf = 230 - pathLen;
+                document.getElementById("infoBuffer").innerHTML = "<span style='color: var(--orange);'>⚠️ Above 210 Target Budget (" + buf + " Chars to Hard Cap)</span>";
             } else {
                 progressFill.style.backgroundColor = "var(--green)";
-                const buf = 210 - pathLen;
-                document.getElementById("infoBuffer").innerText = "✓ Safety Buffer: " + buf + " Characters Margin Below Limit";
+                const buf = 230 - pathLen;
+                document.getElementById("infoBuffer").innerText = "✓ Safety Buffer: " + buf + " Chars Margin Below 230 Hard Cap";
             }
 
-            document.getElementById("infoDescription").innerText = item.desc || "SOP-ADM-001 v3.3 standard directory node. Governed by ONeill Contractors Inc. enterprise document control policy.";
+            document.getElementById("infoDescription").innerText = item.desc || "SOP-ADM-001 v3.4 standard directory node. Governed by ONeill Contractors Inc. enterprise document control policy.";
         }
 
         // CONTROL BUTTONS
